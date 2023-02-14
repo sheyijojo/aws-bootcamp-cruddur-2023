@@ -7,5 +7,7 @@
 ![](https://img.shields.io/github/issues/pandao/editor.md.svg)
 ![](https://img.shields.io/bower/v/editor.md.svg)
 
+## Journaling Homework
+
 ![napkin-1](_docs/assets/napkin.png)
 ![napkin-2](_docs/assets/pic.jpeg)
