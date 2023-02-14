@@ -1,6 +1,6 @@
 # aws-bootcamp-cruddur-2023
 
-## About project
+![Cruddur Graphic](_docs/assets/devops.jpg)
 
 10 -12 Weeks Project - End-End Cloud Deployment for Crudder- a microbloggin site
 
