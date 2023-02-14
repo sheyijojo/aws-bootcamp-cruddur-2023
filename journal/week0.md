@@ -7,4 +7,4 @@
 ![](https://img.shields.io/github/issues/pandao/editor.md.svg)
 ![](https://img.shields.io/bower/v/editor.md.svg)
 
-![Cruddur Graphic](_docs/assets/napkin.png)
+![Napkin drawing 1](_docs/assets/napkin.png)
