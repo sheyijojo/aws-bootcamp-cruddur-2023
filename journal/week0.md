@@ -1,5 +1,7 @@
 # Week 0 — Billing and Architecture
 
+Page under constrcution, please ignore all spelliing errors, I will update them!
+
 ## First napkin diagram
 
 First sketch of my logical diagram.
@@ -38,7 +40,7 @@ Free tier utilization - Current and forecasted usages- check from time to time b
 
 #### Billing alert
 
-managebillingalerts -
+managebillingalerts
 
 - This is a region-based service managed by cloud watch
 - Go to alarm, create alarm, select metric, go to billing by total estimated charges
@@ -50,21 +52,50 @@ managebillingalerts -
 
 #### Budget
 
+- Highly recommended
 - Go to budget.Check your console and you will be see the global icon. Shows it can be set globally unlike the billing alert that needs to be in a region.
 - Buggets are advanced features
-- Set only one or two budgets. More than two could be chargeable
+- Set only one or two budgets. Selecting more than two budgets could be chargeable
+- Chose zero spend budget i.e 0.01$ speding budgte sld not exceed this amt
+- Give it a name and your budgeted amount.
 
-- Cost Explorer
-- Calculate AWS estimates cost for service
-- Check AWS credits
-- Cost Allocation tags
-- Free forever vs free for 12 months.
+#### Cost Allocation tags
+
+For example having ec2 instance resources. You might want to know their cost
+
+- It is good is good to tags for these resources
+- Tags can be used at the billing-const allocation tags
+- You will need to activate it
+
+#### Cost Explorer
+
+Helpful for Financial cost management of your resources
+
+- Go to Billing, clieck on cost explorer
+- you could check for dauly, weekly and hourly.
+- Male use of filters based on services, regions.
+
+#### Calculate AWS estimates cost for service
+
+This helps to show cost estimates based on location, region, OS, instance type and so on
+
+- Amz EC2 pricing. Instance name, rate, vCPU, Memory, Storgae, Network performance.
+- Shows hourly cost based on
+- E.g self calculator Free tier = 720 \* 0.12 = 86.4
+- Aws calculator. Search for aws calc on web. create estimate. input the services.
+- Aws estimated cost is 87.60(Provided for 730hours). Average of both months.
+
+#### Free forever vs free for 12 months.
+
+- ESearch for AWS free tier and explore.
+- ECis 750 hours, you could do the calculations your self on AWS calc to get the amount in dollars
+- Always terminate your resources.
 
 #### Homework Challenges
 
 Only use the root for AWS account setup
 
-- Destroy your root account credentials, set MFA, IAM role
+Destroy your root account credentials, set MFA, IAM role
 
 1. I registered my account with AWS with the free tier account, Set up the root account
    with MFA(AUTHY, DUO and the likes).
