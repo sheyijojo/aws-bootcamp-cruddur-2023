@@ -2,6 +2,9 @@
 
 ## First napkin diagram
 
-![Cruddur Graphic](/_docs/assets/napkin-one.png)
+First sketch of my logical diagram.
+![Napkin img](/_docs/assets/napkin-one.png)
 
-## second napkin diagram
+## 2nd sketch logical diagram
+
+![cruddar logical](/_docs/assets/cruddar_logical.jpeg)
