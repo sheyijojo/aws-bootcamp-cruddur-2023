@@ -63,7 +63,7 @@ value - active
 
 Management account- Dont use to create accounts or resources. Just use to manage accounts
 
-step4 : Enable AWS Cloud Trail
+step 4 : Enable AWS Cloud Trail
 This the audit service from AWS
 Monitor data security & Residence
 Understand the region vs AZ vs Global services
@@ -77,6 +77,53 @@ Customer managed AWS key - choose new pr ise exisitng
 use an alias
 remember to tag as well.
 Next
+
+Step 5: Create IAM users
+There are 3 kinds of users:Normal User(Least asccess permissions), IAM users, Sys users,  
+Don't user Root user on a day-day to basis
+Create IAM user
+SetUp MFA in Security permissions. Especially if you have Admin access
+
+step 6: IAM roles and IAM policies
+They are different
+IAM roles - Permissions of what can be done or not done. Can be only linked to a service in AWS.
+e.g 3rd part user who can access the cloud env with roles, or ec2 gaining access to accoun to perform actions through roles
+IAM policies- Can be attaced to a grp, user, admin roles..
+Remember principles of least priviledge.
+
+step 7:Roles
+
+- Using custom roles to your advantage
+- Keep roles very simple at first
+  e.g create AWs service
+  choose EC2
+  choose adminaccess- Access to all aws services and resources
+  choose a desc
+  add a tag
+
+step 8: Policies
+policy
+security audit(read only)
+you can attach to a role, user or grps.
+
+step 9: Create Group
+Attach permissions policy
+e.g security audit
+
+step 10: SCP- Service Control Policies
+IAM is global
+S3 is global
+search for SCP- Under IAM or AWS ORGS
+Create policy. e.g using a yaml file
+
+<?---
+Version: '2012-10-17'
+Statement: #Denies the Account from leaving the Organization
+- Effect: Deny
+  Action:
+  - organizations:LeaveOrganization
+  Resource: "*"
+?>
 
 ## Spend consideration
 
