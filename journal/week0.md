@@ -116,14 +116,30 @@ S3 is global
 search for SCP- Under IAM or AWS ORGS
 Create policy. e.g using a yaml file
 
-<?---
 Version: '2012-10-17'
 Statement: #Denies the Account from leaving the Organization
+
 - Effect: Deny
   Action:
   - organizations:LeaveOrganization
-  Resource: "*"
-?>
+    Resource: "\*"
+
+add to the policy- transform yaml to json file
+give it a name
+give it a tag
+attach this policy to your aws org
+
+We did not cover amazon guarduty, aws config- I already have knowledge about this topic though.
+
+**Security Best Practices**
+
+1. Data Protection & Residency in accordance to Security Policy
+2. Identity & Access Management with least priviledge
+   Governance & compliance of AWS services being used
+   gLOBAL VS rEGIONAL SERVOCES
+3. Ccomplaint servies
+4. Shared responsibilitt of threat detection
+5. incident response plans to include cloud
 
 ## Spend consideration
 
