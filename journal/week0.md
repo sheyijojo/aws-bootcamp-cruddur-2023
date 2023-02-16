@@ -20,25 +20,81 @@ This week0 :Bootcamp Overview and Introduction to Cloud Spending
 
 ## Security Considerations
 
+Constraints- AWS keep updating their services every year.
+
+Indentify and Inform the businesses of technical risks and vulnerablilites associated to cloud
+environments and cloud resources.
+
+- What is cloud security?
+- Cybersecurity that protects the data apps and services assocated with cloud envs from both external and internal threats
+
+- Reducing Human errors
+- Reducing breach impact
+- Protecting netwroks, apps, services in cloud envs agaist malicious data theft
+
+###### Steps to security
+
+- step 1: Add MFA to root user(Most Powerful- Has full admin access and used to create users)
+  Hide information about your account ID
+  To create MFA for your root user, go to account, go to security credentials.
+
+- step 2 - Create an organization unit
+  Note: Each account are different from each other. What governs all of them in an organzation? Then, here comes orgaization units.
+- Root user account is the management account, dont add apps to it. Just used for creation of orgs, underneath, you create accounts needed in the org.
+-
+- Step 3 - Go to AWS organizations(No cost to create one) with your root account
+  Create organizations- U will have root, and your rootuser name(management account)
+  create new org unit using root, diff bwt root and management acc is not yet sepecified
+  Good habit to create tags with new units or org created
+  created IT dept, tag name Infotech, values IT.
+  You can rename and delete orgs easilly.
+
+another approach- falling approaach
+
+For more mature env and diff from ceating BU such as Engineering or IT BU
+BU org and IT org will be under stanby, when new BU asuch as IT is created , move from stanby to active.
+name - standby accounts
+key- account_status
+value- standby
+
+name - Active account
+key - accounts actibe
+value - active
+
+Management account- Dont use to create accounts or resources. Just use to manage accounts
+
+step4 : Enable AWS Cloud Trail
+This the audit service from AWS
+Monitor data security & Residence
+Understand the region vs AZ vs Global services
+
+Go to cloudtrail(Use your IAM role with admin priviledges) or root acc(if you want to access all accounts)- But I wont use my root for now
+create trail
+Go to dashboard
+create trail
+Enable log gile SSE-encrytpion- click or unclick
+Customer managed AWS key - choose new pr ise exisitng
+use an alias
+remember to tag as well.
+Next
+
 ## Spend consideration
 
-- AWS Bill Walkthrough
-  Root used to set up IAM user
+AWS Bill Walkthrough
+
+##### Root user(Most powerful) to set up IAM user
 
 1. IAM user by default does not have billing access. Use root user to create access for IAM user.
 2. IAM.
-   Setting billing budget
+   Setting billing budget for IAM users
    Go to root account, get IAM User and add role access to billiing information.
    Activate it
-   IAM users who are admin to access the billing dashboard.
+   IAM users who are admin have access the billing dashboard.
 
-- Billing Alert (Cloud watch & Budget)
+Free tier utilization - Current and forecasted usages- check from time to time bases.
+Pricing of services vary by region- Amount in USD and local currency on dashboard
 
-#### Pricing of services vary by region- Amount in USD and local currency on dashboard
-
-Free tier utilization - Current and forecasted usages- check from time to time bases
-
-#### Billing alert
+#### Billing alert(Cloud Watch & Budget)
 
 managebillingalerts
 
@@ -50,7 +106,7 @@ managebillingalerts
 - create an sns topic- chose email as my end point.
 - Next name your billing alarm. 10 alarms are free for free tier . Wait a couple of mins to set up.
 
-#### Budget
+### Budget
 
 - Highly recommended
 - Go to budget.Check your console and you will be see the global icon. Shows it can be set globally unlike the billing alert that needs to be in a region.
@@ -59,7 +115,7 @@ managebillingalerts
 - Chose zero spend budget i.e 0.01$ speding budgte sld not exceed this amt
 - Give it a name and your budgeted amount.
 
-#### Cost Allocation tags
+### Cost Allocation tags
 
 For example having ec2 instance resources. You might want to know their cost
 
@@ -67,7 +123,7 @@ For example having ec2 instance resources. You might want to know their cost
 - Tags can be used at the billing-const allocation tags
 - You will need to activate it
 
-#### Cost Explorer
+### Cost Explorer
 
 Helpful for Financial cost management of your resources
 
@@ -75,7 +131,7 @@ Helpful for Financial cost management of your resources
 - you could check for dauly, weekly and hourly.
 - Male use of filters based on services, regions.
 
-#### Calculate AWS estimates cost for service
+### Calculate AWS estimates cost for service
 
 This helps to show cost estimates based on location, region, OS, instance type and so on
 
@@ -85,20 +141,20 @@ This helps to show cost estimates based on location, region, OS, instance type a
 - Aws calculator. Search for aws calc on web. create estimate. input the services.
 - Aws estimated cost is 87.60(Provided for 730hours). Average of both months.
 
-#### Free forever vs free for 12 months.
+### Free forever vs free for 12 months.
 
 - ESearch for AWS free tier and explore.
 - ECis 750 hours, you could do the calculations your self on AWS calc to get the amount in dollars
 - Always terminate your resources.
 
-#### Homework Challenges
+### Homework Challenges
 
 Only use the root for AWS account setup
 
 Destroy your root account credentials, set MFA, IAM role
 
 1. I registered my account with AWS with the free tier account, Set up the root account
-   with MFA(AUTHY, DUO and the likes).
+   with MFA(AUTHY, DUO and the likes....or virtual).
    Created two IAM users with Password policy role for interchange and whateverview.
 2. IAM role is gloabal on AWS
 3. Used IAM account to create security credentials. Do not use root user!
