@@ -58,14 +58,25 @@ Some env variables have to be activated
 `export BACKEND_URL = "*"`
 The "WORKDIR /backend-flask" is a directory inside container
 `--host=0.0.0.0` exposes this server to the public
-flask loves the 4567... notes coming on this
+flask loves the 4567... notes coming on thisVAR
+Deactivate Env
+First check/search if present with grep `env | grep BACKEND` AND `env | grep FRONTEND` AND grep `env | grep _URL`
+```sh
+unset BACKEND_URL
+unset FRONTEND_URL
+unset BACKEND
+unset FRONTEND
+```
 
--make sure to unlock the port on the port tab
--open the link for 4567 in your browser
--append to the url to /api/activities/home
--you should get back json
+- make sure to unlock the port on the port tab
+- open the link for 4567 in your browser
+- append to the url to /api/activities/home
+- you should get back json
 
 
-
-
-
+## Build container
+Be in your project directory 
+```sh
+docker build -t backend-flask ./backend-flask
+```
+![Docker build img](/_docs/assets/docker_build.png)
