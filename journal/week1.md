@@ -131,4 +131,4 @@ variation 2
 
 got data from the url- api/activities/home
 
-![Docker build img](/_docs/assets/webdat-api.png.png)
+![Webdata-container](/_docs/assets/webdat-api.png)
