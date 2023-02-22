@@ -45,7 +45,7 @@ The "WORKDIR /backend-flask" is a directory inside container
 `--host=0.0.0.0` exposes this server to the public
 flask loves the 4567... notes coming on this
 
-## merge git gitpod & vscode
+## merge gitpod & vscode
 
 This will merge them without problems
 `git config pull.rebase false`
