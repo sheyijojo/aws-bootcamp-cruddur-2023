@@ -41,6 +41,6 @@ EXPOSE ${PORT}
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
 ```
 
-## merging main branch on gitpod an vscode
+## merge main on gitpod & vscode
 This will merge it without problems
 `git config pull.rebase false`
