@@ -81,3 +81,54 @@ Be in your project directory
 docker build -t backend-flask ./backend-flask
 ```
 `![Docker build img](/_docs/assets/docker_build.png)`
+- Code interpretation
+- t - tags
+- ./ - to my backend-flask and look for docker file
+To see your images, go to your docker icon and check for backendflask
+
+Building Docker from Desktop Instrucion coming soon.....
+check for your images in your terminal
+`docker images`
+`docker build --help`
+
+## Run Container
+```sh
+
+docker run --rm -p 4567:4567 -it backend-flask
+FRONTEND_URL="*" BACKEND_URL="*" docker run --rm -p 4567:4567 -it backend-flask
+export FRONTEND_URL="*"
+export BACKEND_URL="*"
+docker run --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flask
+docker run --rm -p 4567:4567 -it  -e FRONTEND_URL -e BACKEND_URL backend-flask
+unset FRONTEND_URL="*"
+unset BACKEND_URL="*"
+
+```
+Code Explanation
+
+`docker run --rm -p 4567:4567 -it backend-flask`
+In this code, the env not defined
+
+`docker run --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flas`
+env variables get passed only, same with FRONTEND_URL
+
+Always check the logs in the container for debugging
+use attach shell in the container and get into the container 
+
+This is bring you into the shell
+check for env var
+`env enter`
+This will check if env is set
+
+make sure you export env variables before running 
+`docker run --rm -p 4567:4567 -it  -e FRONTEND_URL -e BACKEND_URL backend-flask`
+variation 1
+
+`docker run --rm -p 4567:4567 -it  -e FRONTEND_URL -e BACKEND_URL backend-flask`
+variation 2
+
+`docker build --help`
+
+got data from the url- api/activities/home
+
+![Docker build img](/_docs/assets/webdat-api.png.png)
