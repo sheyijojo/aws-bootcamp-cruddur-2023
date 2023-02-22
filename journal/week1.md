@@ -1,5 +1,8 @@
 # Week 1 — App Containerization
 
+References
+[](https://hub.docker.com/_/python)
+
 - Added the backend folder through my vscode application and reloaded my gitpod for sync
 - Edited gitpod to configure dockfile in my backend
 
@@ -68,14 +71,11 @@ unset BACKEND
 unset FRONTEND
 ```
 
-<<<<<<< HEAD
 ## merge gitpod & vscode
-=======
 - make sure to unlock the port on the port tab
 - open the link for 4567 in your browser
 - append to the url to /api/activities/home
 - you should get back json
->>>>>>> 13c051eb2e37252e7c3cbf80c9a9743f76ff4ade
 
 
 ## Build container
@@ -83,4 +83,67 @@ Be in your project directory
 ```sh
 docker build -t backend-flask ./backend-flask
 ```
-![Docker build img](/_docs/assets/docker_build.png)
+`![Docker build img](/_docs/assets/docker_build.png)`
+- Code interpretation
+- t - tags
+- ./ - to my backend-flask and look for docker file
+To see your images, go to your docker icon and check for backendflask
+
+Building Docker from Desktop Instrucion coming soon.....
+check for your images in your terminal
+`docker images`
+`docker build --help`
+
+## Run Container
+```sh
+
+docker run --rm -p 4567:4567 -it backend-flask
+FRONTEND_URL="*" BACKEND_URL="*" docker run --rm -p 4567:4567 -it backend-flask
+export FRONTEND_URL="*"
+export BACKEND_URL="*"
+docker run --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flask
+docker run --rm -p 4567:4567 -it  -e FRONTEND_URL -e BACKEND_URL backend-flask
+unset FRONTEND_URL="*"
+unset BACKEND_URL="*"
+
+```
+Code Explanation
+
+`docker run --rm -p 4567:4567 -it backend-flask`
+In this code, the env not defined
+
+`docker run --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flas`
+env variables get passed only for backend and frontend
+
+Always check the logs in the container for debugging
+use attach shell in the container and get into the container 
+
+This is bring you into the shell
+check for env var
+`env enter`
+This will check if env is set
+
+make sure you export env variables before running 
+`--rm` when we stop the container, the img gets removed
+`docker run --rm -p 4567:4567 -it  -e FRONTEND_URL -e BACKEND_URL backend-flask`
+##### variation 1
+
+`docker run --rm -p 4567:4567 -it  -e FRONTEND_URL -e BACKEND_URL backend-flask`
+##### variation 2
+
+`docker build --help`
+
+got data from the url- api/activities/home
+
+![Webdata-container](/_docs/assets/webdat-api.png)
+
+`docker ps` List containers
+'docker ps -a` Show all containers(default shows jut running)
+
+##  Containerize Frontend
+
+## Run NPM Install
+`cd frontend-react-js`
+`npm i`
+
+## Create Docker File
