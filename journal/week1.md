@@ -68,14 +68,11 @@ unset BACKEND
 unset FRONTEND
 ```
 
-<<<<<<< HEAD
 ## merge gitpod & vscode
-=======
 - make sure to unlock the port on the port tab
 - open the link for 4567 in your browser
 - append to the url to /api/activities/home
 - you should get back json
->>>>>>> 13c051eb2e37252e7c3cbf80c9a9743f76ff4ade
 
 
 ## Build container
@@ -83,4 +80,4 @@ Be in your project directory
 ```sh
 docker build -t backend-flask ./backend-flask
 ```
-![Docker build img](/_docs/assets/docker_build.png)
+`![Docker build img](/_docs/assets/docker_build.png)`
