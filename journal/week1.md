@@ -40,3 +40,7 @@ ENV FLASK_ENV=development
 EXPOSE ${PORT}
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
 ```
+
+## merging main branch on gitpod an vscode
+This will merge it without problems
+`git config pull.rebase false`
