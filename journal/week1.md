@@ -41,6 +41,9 @@ EXPOSE ${PORT}
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
 ```
 
+- The "WORKDIR /backend-flask" is a directory inside container
+
 ## merge main on gitpod & vscode
-This will merge it without problems
+
+This will merge them without problems
 `git config pull.rebase false`
