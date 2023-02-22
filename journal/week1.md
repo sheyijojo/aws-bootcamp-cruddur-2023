@@ -40,13 +40,12 @@ ENV FLASK_ENV=development
 EXPOSE ${PORT}
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
 ```
-- Check for more comments inside the dockerfile
-- The "WORKDIR /backend-flask" is a directory inside container
 
+The "WORKDIR /backend-flask" is a directory inside container
+`--host=0.0.0.0` exposes this server to the public
+flask loves the 4567... notes coming on this
 
-## Test the commands inside Docker on gitpod and vscode
-
-## merge main on gitpod & vscode
+## merge git gitpod & vscode
 
 This will merge them without problems
 `git config pull.rebase false`
