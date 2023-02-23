@@ -1,4 +1,4 @@
-#pyhon image from docker to be used in the container
+#python image from docker to be used in the container
 FROM python:3.10-slim-buster
 
 # Inside the container

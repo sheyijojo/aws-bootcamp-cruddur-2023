@@ -147,3 +147,17 @@ got data from the url- api/activities/home
 `npm i`
 
 ## Create Docker File
+create DockerFile here: `frontend-react-js/Dockerfile`
+
+## Multiple Containers
+create a docker-compose yaml file
+
+create `docker-compose.yml` at the root of the project
+
+
+## BUILD CONTAINER
+`docker build -t frontend-react-js ./frontend-react-js`
+
+## RUN CONTAINER
+`docker run -p 3000:3000 -d frontend-react-js`
+
