@@ -56,10 +56,10 @@ python3 -m flask run --host=0.0.0.0--port=4567
 ## result after running on local machine
 This is done before running on docker. 
 Image below is as a result of running 
-```pip3 install -r requirements.txt```
-```python3 -m flask run --host=0.0.0.0--port=4567```
+`pip3 install -r requirements.txt`
+`python3 -m flask run --host=0.0.0.0--port=4567`
 
-`![Docker build img](/_docs/assets/api-activities-local-machine.png)`
+`![gitpod data](/_docs/assets/api-activities-local-machine.png)`
 
 
 ## activate variables on local machine
