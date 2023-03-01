@@ -146,7 +146,7 @@ got data from the url- api/activities/home
 `cd frontend-react-js`
 `npm i`
 
-## Create Docker File
+## Create Docker File for the frontend
 create DockerFile here: `frontend-react-js/Dockerfile`
 
 ```sh
@@ -162,7 +162,7 @@ CMD ["npm", "start"]
 ```
 
 ## Multiple Containers
-create a docker-compose yaml file
+create `docker-compose.yml` at the root of the project
 ```sh
 version: "3.8"
 services:
@@ -219,9 +219,54 @@ volumes:
     driver: local
 ```
 
+## Code
+This code above 👆 is a `docker compose.yml` file written in version 3.8. It is used to run multiple containers. It defines 4 services:
+- backend-flask
+- frontend-react-js
+- dynamodb-local
+- db 
+Each service is a containerized application that can run simultaneously/together virtuallly.
+
+## backend-flask container. 
+The ``backend-flask``service builds an image using the Dockerfile in the ``./backend-flask`` directory, exposes port ``4567``, and sets an environment variable ``FRONTEND_URL`` and ``BACKEND_URL`` using Gitpod workspace ID and cluster host. 
+
+## name of backend-flask container 
+aws-bootcamp-crudder-2023-backend-flask-1(2f2f7a34....)
+
+## image of backend-flask container
+aws-bootcamp-crudder-2023-backend-flask
+
+## image to be created from the script above 👆
+`backend-flask`
+code for this 
+```sh 
+services:
+  backend-flask:
+    enviroment:
+  build: ./backend-flask
+
+```
+## frontend-flask container.
+The frontend-react-js service builds an image using the ``Dockerfile`` in the ``./frontend-react-js directory``, exposes port 3000, and sets an environment variable ``REACT_APP_FRONTEND_URL`` using the Gitpod workspace ID and cluster host.
+
+## name of frontend-flask container 
+aws-bootcamp-crudder-2023-frontend-react-js-1(330000....)
 
 
-create `docker-compose.yml` at the root of the project
+## image of frontend-flask container
+not specified yet 🤷
+
+## dynamo db
+The dynamodb-local service runs the ``amazon/dynamodb-local Docker image``, exposes ``port 8000``, and mounts a local directory ``./docker/dynamodb ``to the container's ``/home/dynamodblocal/data directory``, allowing for persistent storage of data.
+
+## db service
+The db service runs the ``postgres:13-alpine`` Docker image, exposes ``port 5432``, and sets an environment variable ``POSTGRES_USER and POSTGRES_PASSWORD``. The volume ``db ``is mounted to the container's ``/var/lib/postgresql/data`` directory, allowing for persistent storage of data.
+
+The networks section defines a bridge network called internal-network with the name cruddur.
+
+Finally, the volumes section defines a local volume named db.
+
+
 
 
 ## BUILD CONTAINER
