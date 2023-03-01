@@ -12,11 +12,6 @@ Aim is to put the backend in a container
 
 Run Python to start the server. Make sure to open this port on windows pc.
 
-## merge git gitpod & vscode
-
-This will merge them without problems
-`git config pull.rebase false`
-
 ```sh
 cd backend-flask
 export FRONTEND_URL="*"
@@ -24,15 +19,15 @@ export BACKEND_URL="*"
 python3 -m flask run --host=0.0.0.0 --port=4567
 cd ..
 ```
-
-Added a docker extension on gitpod by going to the extension icon and searhc for Docker
-Install the dependencies and devDependencies and start the server.
+## Docker Extension
+Add a docker extension on gitpod by going to the extension icon and searhc for Docker
+Install the dependencies and Dev dependencies and start the server.
 
 ## Add Dockerfile
 
-created a dockerfile in `$ backend-flask/Dockerfile`
+create a dockerfile in `$ backend-flask/Dockerfile`
 Docker can build images automatically by reading the instrcutions from a dockerfile
-read more on dockefile here: [dockerfile](https://docs.docker.com/engine/reference/builder/)
+read more here: dockefile here: [dockerfile](https://docs.docker.com/engine/reference/builder/)
 
 ```sh
 FROM python:3.10-slim-buster
@@ -50,13 +45,24 @@ EXPOSE ${PORT}
 CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
 ```
 
-### Test the commands on local machine(gitpod)
+### Test the commands 👆  on local machine - gitpod or vscode
 These commands are to be run one after the other
 ```sh
 pip3 install -r requirements.txt
-python3 -m flask run --hos=0.0.0.0--port=4567
+python3 -m flask run --host=0.0.0.0--port=4567
+
 ```
-Some env variables have to be activated
+
+## result after running on local machine
+This is done before running on docker. 
+Image below is as a result of running 
+```pip3 install -r requirements.txt```
+```python3 -m flask run --host=0.0.0.0--port=4567```
+
+`![Docker build img](/_docs/assets/api-activities-local-machine.png)`
+
+
+## activate variables on local machine
 `export FRONTEND_URL = "*"`
 `export BACKEND_URL = "*"`
 
