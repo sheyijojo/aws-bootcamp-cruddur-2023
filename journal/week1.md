@@ -64,11 +64,16 @@ Some env variables have to be activated
 `--host=0.0.0.0` exposes this server to the public
 flask loves the 4567... notes coming on thisVAR
 
-## Deactivate Env
-First check/search if ENV is present with:
-grep `env | grep BACKEND` AND 
-`env | grep FRONTEND` AND 
-grep `env | grep _URL`
+## Deactivate Environment
+First search if ENV is present with:
+
+```sh
+grep env | grep BACKEND OR
+env | grep FRONTEND OR
+grep env | grep _URL
+
+```
+
 ```sh
 unset BACKEND_URL
 unset FRONTEND_URL
@@ -76,7 +81,7 @@ unset BACKEND
 unset FRONTEND
 ```
 
-## merge gitpod & vscode
+## 
 - make sure to unlock the port on the port tab
 - open the link for 4567 in your browser
 - append to the url to /api/activities/home
@@ -89,13 +94,15 @@ Be in your project directory
 docker build -t backend-flask ./backend-flask
 ```
 `![Docker build img](/_docs/assets/docker_build.png)`
-- Code interpretation
+
+## Code interpretation
 - t - tags
 - ./ - to my backend-flask and look for docker file
 To see your images, go to your docker icon and check for backendflask
 
-Building Docker from Desktop Instrucion coming soon.....
-check for your images in your terminal
+## Building Docker from Desktop Instruction coming soon.....
+
+## check for your images in your terminal
 `docker images`
 `docker build --help`
 
@@ -295,6 +302,7 @@ Finally, the volumes section defines a local volume named db.
 This yaml file called docker-compose allows for multiple container spin for frontend, backend, dynamo db, and db.
 
 ## run the docker-compose yaml file
+
 
 ## BUILD CONTAINER
 `docker build -t frontend-react-js ./frontend-react-js`
