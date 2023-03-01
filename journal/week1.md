@@ -59,11 +59,16 @@ python3 -m flask run --hos=0.0.0.0--port=4567
 Some env variables have to be activated
 `export FRONTEND_URL = "*"`
 `export BACKEND_URL = "*"`
-The "WORKDIR /backend-flask" is a directory inside container
+
+## The "WORKDIR /backend-flask" is a directory inside container
 `--host=0.0.0.0` exposes this server to the public
 flask loves the 4567... notes coming on thisVAR
-Deactivate Env
-First check/search if present with grep `env | grep BACKEND` AND `env | grep FRONTEND` AND grep `env | grep _URL`
+
+## Deactivate Env
+First check/search if ENV is present with:
+grep `env | grep BACKEND` AND 
+`env | grep FRONTEND` AND 
+grep `env | grep _URL`
 ```sh
 unset BACKEND_URL
 unset FRONTEND_URL
@@ -94,7 +99,8 @@ check for your images in your terminal
 `docker images`
 `docker build --help`
 
-## Run Container
+## Run Container 
+
 ```sh
 
 docker run --rm -p 4567:4567 -it backend-flask
@@ -107,14 +113,19 @@ unset FRONTEND_URL="*"
 unset BACKEND_URL="*"
 
 ```
-Code Explanation
+## Code Explanation - docker run
 
 `docker run --rm -p 4567:4567 -it backend-flask`
-In this code, the env not defined
+In this code, the enviroment value is not defined for the backend on the CLI
+
 
 `docker run --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flas`
-env variables get passed only for backend and frontend
+In this code, environment variables are defined for backend and frontend on the CLI
 
+`docker run --rm -p 4567:4567 -it  -e FRONTEND_URL -e BACKEND_URL backend-flask`
+Here, environment variable is set, we are just to run code
+
+## Log check
 Always check the logs in the container for debugging
 use attach shell in the container and get into the container 
 
@@ -126,12 +137,20 @@ This will check if env is set
 make sure you export env variables before running 
 `--rm` when we stop the container, the img gets removed
 `docker run --rm -p 4567:4567 -it  -e FRONTEND_URL -e BACKEND_URL backend-flask`
-##### variation 1
+##### docker run
 
 `docker run --rm -p 4567:4567 -it  -e FRONTEND_URL -e BACKEND_URL backend-flask`
-##### variation 2
 
 `docker build --help`
+
+- set the env variables with export on the CLI
+```export FRONTEND_URL="*"``
+``export BACKEND_URL="*"``
+- run the container
+
+``--rm    Automatically remove the container when it exits``
+`` -p, --publish list    Publish a container's port(s) to the host``
+
 
 got data from the url- api/activities/home
 
@@ -145,10 +164,12 @@ got data from the url- api/activities/home
 ## Run NPM Install
 `cd frontend-react-js`
 `npm i`
+write up on this:
 
 ## Create Docker File for the frontend
 create DockerFile here: `frontend-react-js/Dockerfile`
 
+## conterize the frontend with docker
 ```sh
 FROM node:16.18
 
@@ -162,7 +183,8 @@ CMD ["npm", "start"]
 ```
 
 ## Multiple Containers
-create `docker-compose.yml` at the root of the project
+create `docker-compose.yml` at the root of the project ``/workspace/aws-bootcamp-cruddur-2023/docker-compose.yml``
+
 ```sh
 version: "3.8"
 services:
@@ -227,8 +249,11 @@ This code above 👆 is a `docker compose.yml` file written in version 3.8. It i
 - db 
 Each service is a containerized application that can run simultaneously/together virtuallly.
 
+
 ## backend-flask container. 
 The ``backend-flask``service builds an image using the Dockerfile in the ``./backend-flask`` directory, exposes port ``4567``, and sets an environment variable ``FRONTEND_URL`` and ``BACKEND_URL`` using Gitpod workspace ID and cluster host. 
+
+
 
 ## name of backend-flask container 
 aws-bootcamp-crudder-2023-backend-flask-1(2f2f7a34....)
@@ -266,8 +291,10 @@ The networks section defines a bridge network called internal-network with the n
 
 Finally, the volumes section defines a local volume named db.
 
+## Summary for yaml file
+This yaml file called docker-compose allows for multiple container spin for frontend, backend, dynamo db, and db.
 
-
+## run the docker-compose yaml file
 
 ## BUILD CONTAINER
 `docker build -t frontend-react-js ./frontend-react-js`
