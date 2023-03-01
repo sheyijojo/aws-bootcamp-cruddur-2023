@@ -150,6 +150,20 @@ got data from the url- api/activities/home
 create DockerFile here: `frontend-react-js/Dockerfile`
 
 ```sh
+FROM node:16.18
+
+ENV PORT=3000
+
+COPY . /frontend-react-js
+WORKDIR /frontend-react-js
+RUN npm install
+EXPOSE ${PORT}
+CMD ["npm", "start"]
+```
+
+## Multiple Containers
+create a docker-compose yaml file
+```sh
 version: "3.8"
 services:
   backend-flask:
@@ -205,8 +219,7 @@ volumes:
     driver: local
 ```
 
-## Multiple Containers
-create a docker-compose yaml file
+
 
 create `docker-compose.yml` at the root of the project
 
