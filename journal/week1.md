@@ -58,6 +58,7 @@ This is done before running on docker.
 Image below is as a result of running 
 `pip3 install -r requirements.txt`
 `python3 -m flask run --host=0.0.0.0--port=4567`
+`backend url = /api/activities/home`
 
 ![gitpod data](/_docs/assets/api-activities-local-machine.png)
 
@@ -94,16 +95,25 @@ unset FRONTEND
 - you should get back json
 
 
-## Build container
-Be in your project directory 
+## Build container image
+Be in your project directory: `/workspace/aws-bootcamp-cruddur-2023`
+
+## Build images
 ```sh
 docker build -t backend-flask ./backend-flask
 ```
 ![Docker build img](/_docs/assets/docker_build.png)
 
+## Built images
+- backend-flask
+- python
+
+![Docker build img](/_docs/assets/built_images.png)
+
+
 ## Code interpretation
 - t - tags
-- ./ - to my backend-flask and look for docker file
+- `. /` - to my backend-flask and look for docker file
 To see your images, go to your docker icon and check for backendflask
 
 ## Building Docker from Desktop Instruction coming soon.....
