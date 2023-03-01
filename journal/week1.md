@@ -71,7 +71,7 @@ Image below is as a result of running
 `--host=0.0.0.0` exposes this server to the public
 flask loves the 4567... notes coming on thisVAR
 
-## Deactivate Environment
+## Deactivate Environment(optional)
 First search if ENV is present with:
 
 ```sh
@@ -121,16 +121,24 @@ docker build -t backend-flask ./backend-flask
 - `./backend` - directory to my backend  to search for docker file
 To see your images, go to your docker icon and check for backendflask
 
-## Summary
+## Summary of build container image
 Built an image from the dockerfile using docker build . Dockerfile contains the follwing:
 - installing base image called python slim buster `FROM pytgon:3.10-slim-buster`
+
 - specify working directory already created `WORKDIR /backend-flask`
+
 - copy requirements.txt from host machine(outside container) into backend dir inside the container ` COPY requirements.txt requirements.txt`
+
 - Runs the required python libraries - `RUN pip3 install -r requirements.txt`
+
 - `COPY . .`- This line copies the rest of the files and directories from the host machine to the backend-flask directory inside the container.
+
 - `ENV FLASK_ENV=development`- This line sets an environment variable FLASK_ENV to development. This variable can be accessed and used by the Flask application running inside the container.
+
 - what is inside requirements? `flask` and `flask-cors`
+
  - `EXPOSE ${PORT}`- This line exposes the port specified by the `${PORT}` environment variable. This allows external processes to communicate with the container over this port.
+
 - `CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]` - This line specifies the command that will be executed when the container is started. In this case, it will start the Flask application by running the flask run command with python3. The --host=0.0.0.0 option allows external connections to be made to the container, and the --port=4567 option specifies the port on which the Flask application will listen.
 
 ## Building Docker from Desktop Instruction coming soon.....
@@ -139,8 +147,15 @@ Built an image from the dockerfile using docker build . Dockerfile contains the 
 `docker images`
 `docker build --help`
 
-## Run Container 
+#### Run Container 
+Objective:
+- run a docker container with an image
 
+## check for containers 
+`docker container ps `
+
+## docker list of command. Not to be put in a docker file
+- can put in a yaml file to run multiple containers 
 ```sh
 
 docker run --rm -p 4567:4567 -it backend-flask
@@ -153,10 +168,16 @@ unset FRONTEND_URL="*"
 unset BACKEND_URL="*"
 
 ```
-## Code Explanation - docker run
-
+## Code Explanation - docker run backend
 `docker run --rm -p 4567:4567 -it backend-flask`
 In this code, the enviroment value is not defined for the backend on the CLI
+` docker run` - Basic command to run docker contain
+` --rm` - 
+`-p` - 
+`-it` - 
+`backend-flask` - 
+## summary of code above 
+
 
 
 `docker run --rm -p 4567:4567 -it -e FRONTEND_URL='*' -e BACKEND_URL='*' backend-flas`
