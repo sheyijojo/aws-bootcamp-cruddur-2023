@@ -441,6 +441,9 @@ This yaml file called docker-compose allows for multiple container spin for fron
 
 #### STEP 5 - Add new path through the api extention and eidt on openapi file
 
+- eidited the app.py, and added notifications_activities
+![backend end point](/_docs/assets/backend%20endpoint.png)
+
 
 
 
