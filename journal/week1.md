@@ -376,14 +376,14 @@ aws-bootcamp-crudder-2023-frontend-react-js-1(330000....)
 
 
 ## image of frontend-flask container
-not specified yet 🤷- Actually is in the yaml file.
+not specified yet 🤷- Actually is in the yaml file as above here
 
 ## Observation
 running all the yaml file in the root folder will create images and containers that includes the root folder
 
 ## ROOT folder
 ``aws-bootcamp-cruddur-2023``
-All container gets destroyed, nbut previously created images remain the same.
+All container gets destroyed, but previously created images remain the same.
 
 ## dynamo db
 The dynamodb-local service runs the ``amazon/dynamodb-local Docker image``, exposes ``port 8000``, and mounts a local directory ``./docker/dynamodb ``to the container's ``/home/dynamodblocal/data directory``, allowing for persistent storage of data.
@@ -398,7 +398,8 @@ Finally, the volumes section defines a local volume named db.
 ## Summary for yaml file
 This yaml file called docker-compose allows for multiple container spin for frontend, backend, dynamo db, and db.
 
-## run the docker-compose yaml file
+## image of backend and frontend communication with data 
+![backend_frontend](/_docs/assets/backend_frontend%20docker.png)
 
 
 ## BUILD CONTAINER
