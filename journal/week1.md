@@ -235,13 +235,19 @@ This will check if env is set
 `cd frontend-react-js`
 `npm i`
 write up on this:
+# Summary of the `npm i`
+This command runs the npm command to install the dependencies specified in the package.json file for the React.js application. 
+
+This command will download and install all the required dependencies and store them in a node_modules directory in the same directory as the package.json file. These dependencies may include various React.js libraries, CSS frameworks, or other packages that the application depends on.
+
+Once these two commands are run, the necessary dependencies for the React.js application should be installed and the application should be ready to run
 
 ## Create Docker File for the frontend
 create DockerFile here: `frontend-react-js/Dockerfile`
 
 ## contenarize the frontend with docker
 
-## Create Docker file for frontend
+## Create docker file for frontend: `Dockerfile`
 ```sh
 FROM node:16.18
 
@@ -254,9 +260,12 @@ EXPOSE ${PORT}
 CMD ["npm", "start"]
 ```
 
-`FROM node:16.18` - Base image 
+`FROM node:16.18` - Base node image with version 
+`ENV PORT=3000` - set environmental variable PORT=3000
+`COPY . /frontend-react-js - copy all files from d current directory into a new directory called frontend-react-js. 
+`WORKDIR`-  working directory to find dockerfile
 
-## Multiple Containers
+## Multiple Containers with yaml file
 create `docker-compose.yml` at the root of the project ``/workspace/aws-bootcamp-cruddur-2023/docker-compose.yml``
 
 ```sh
@@ -315,6 +324,20 @@ volumes:
     driver: local
 ```
 
+## run docker with yml
+``docker compose up``
+
+## Observation
+running all the yaml files in the root folder will create images and containers that includes the root folder
+
+## all containers after `docker compose up`
+
+![all container](/_docs/assets/all_containers.png)
+
+# all ports after `docker compose up`
+![all port](/_docs/assets/all_ports.png)
+
+
 ## Code
 This code above 👆 is a `docker compose.yml` file written in version 3.8. It is used to run multiple containers. It defines 4 services:
 - backend-flask
@@ -353,7 +376,14 @@ aws-bootcamp-crudder-2023-frontend-react-js-1(330000....)
 
 
 ## image of frontend-flask container
-not specified yet 🤷
+not specified yet 🤷- Actually is in the yaml file.
+
+## Observation
+running all the yaml file in the root folder will create images and containers that includes the root folder
+
+## ROOT folder
+``aws-bootcamp-cruddur-2023``
+All container gets destroyed, nbut previously created images remain the same.
 
 ## dynamo db
 The dynamodb-local service runs the ``amazon/dynamodb-local Docker image``, exposes ``port 8000``, and mounts a local directory ``./docker/dynamodb ``to the container's ``/home/dynamodblocal/data directory``, allowing for persistent storage of data.
