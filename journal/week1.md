@@ -383,7 +383,7 @@ running all the yaml file in the root folder will create images and containers t
 
 ## ROOT folder
 ``aws-bootcamp-cruddur-2023``
-All container gets destroyed, but previously created images remain the same.
+All container gets destroyed when stopped, but previously created images remain the same. I.e Image don't need to be downlaoded from the internet all over again. 
 
 ## dynamo db
 The dynamodb-local service runs the ``amazon/dynamodb-local Docker image``, exposes ``port 8000``, and mounts a local directory ``./docker/dynamodb ``to the container's ``/home/dynamodblocal/data directory``, allowing for persistent storage of data.
@@ -408,13 +408,41 @@ This yaml file called docker-compose allows for multiple container spin for fron
 - postgres
 
 
-## BUILD Individual rontend CONTAINER without multi container yaml
+## BUILD Individual frontend CONTAINER without multi container yaml
 `docker build -t frontend-react-js ./frontend-react-js`
 
-## RUN frontend  CONTAINER 
+## RUN individual frontendCONTAINER 
 `docker run -p 3000:3000 -d frontend-react-js`
 
 # Document the Notification Endpoint for the OpenAI Document
+#### STEP 1
+- Launch your container 
+- open the openapi.yml file in frontend `openapi-3.0.yml`
+
+#### Add open api extention
+![open Api](/_docs/assets/openapi_swagger.png)
+
+#### STEP 2
+- Open the api file and click on the extension
+- open api is good for documentating an api
+![api_up](/_docs/assets/api_up.png)
+
+#### STEP 3
+- `docker compose up`
+
+#### Debugging
+- debug with logs on your container if it is not running. 
+- It could be some dependencies need installation.
+
+#### STEP 4 - Add an Endpoint
+
+##### Open API specification link to see response objects or any other objects
+[](https://spec.openapis.org/oas/v3.0.3)
+
+#### STEP 5 - Add new path through the api extention and eidt on openapi file
+
+
+
 
 # Write a Flask Backend Endpoint for Notifications
 
