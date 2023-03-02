@@ -401,10 +401,25 @@ This yaml file called docker-compose allows for multiple container spin for fron
 ## image of backend and frontend communication with data 
 ![backend_frontend](/_docs/assets/backend_frontend%20docker.png)
 
+# Individual Containers
+- amazon dynamodb
+- aws-backend
+- aws-frontend
+- postgres
 
-## BUILD CONTAINER
+
+## BUILD Individual rontend CONTAINER without multi container yaml
 `docker build -t frontend-react-js ./frontend-react-js`
 
-## RUN CONTAINER
+## RUN frontend  CONTAINER 
 `docker run -p 3000:3000 -d frontend-react-js`
 
+# Document the Notification Endpoint for the OpenAI Document
+
+# Write a Flask Backend Endpoint for Notifications
+
+# Write a React page for Notifications
+
+# Run DynamoDB local container and ensure it works
+
+# Run Postgress container and snure it works
