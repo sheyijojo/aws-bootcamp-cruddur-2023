@@ -446,11 +446,134 @@ This yaml file called docker-compose allows for multiple container spin for fron
 
 
 #### Front end point 
+- Done
 
 # Write a Flask Backend Endpoint for Notifications
+- Done
 
 # Write a React page for Notifications
+- Done
 
 # Run DynamoDB local container and ensure it works
+- Done
 
-# Run Postgress container and snure it works
+# Run Postgress container and make sure it works
+- Done
+
+#### Adding Postgres
+
+##### Containerize postgress
+
+- Postgres is already integrated in our docker compose file:
+- We can bring them into containers and reference them externally. Incase we want to use them in our local machine.
+
+```sh
+services:
+  db:
+    image: postgres:13-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+volumes:
+  db:
+    driver: local
+
+```
+#### install the postgress client into local machine(in this case, Gitpod)
+
+```sh
+- name: postgres
+    init: |
+      curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+      echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+      sudo apt update
+      sudo apt install -y postgresql-client-13 libpq-dev
+```
+
+#### containerize DynamoDB local
+
+```sh
+services:
+  dynamodb-local:
+    # https://stackoverflow.com/questions/67533058/persist-local-dynamodb-data-in-volumes-lack-permission-unable-to-open-databa
+    # We needed to add user:root to get this working.
+    user: root
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+```
+
+#### search for dynamo db on the internet
+
+#### check 100 days of cloud
+[](https://github.com/100DaysOfCloud/challenge-dynamodb-local)
+
+#### Create table Dynamodb
+- paste in terminal with aws cli
+```sh
+aws dynamodb create-table \
+    --endpoint-url http://localhost:8000 \
+    --table-name Music \
+    --attribute-definitions \
+        AttributeName=Artist,AttributeType=S \
+        AttributeName=SongTitle,AttributeType=S \
+    --key-schema AttributeName=Artist,KeyType=HASH AttributeName=SongTitle,KeyType=RANGE \
+    --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
+    --table-class STANDARD
+```
+![dynamo db table](/_docs/assets/create%20table_dynamodb.png)
+
+
+#### Create an Item
+
+```sh
+aws dynamodb put-item \
+    --endpoint-url http://localhost:8000 \
+    --table-name Music \
+    --item \
+        '{"Artist": {"S": "No One You Know"}, "SongTitle": {"S": "Call Me Today"}, "AlbumTitle": {"S": "Somewhat Famous"}}' \
+    --return-consumed-capacity TOTAL  
+
+```
+
+#### List Tables - Music
+
+``aws dynamodb list-tables --endpoint-url http://localhost:8000  ``
+
+#### get music records
+
+`` aws dynamodb scan --table-name Music --query "Items" --endpoint-url http://localhost:8000``
+
+#### Dynamo DB is good to go. Working perfectly
+
+
+#### Postgres Running  5432
+
+#### Install driver for Postgress
+
+```sh
+ curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+      echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+      sudo apt update
+      sudo apt install -y postgresql-client-13 libpq-dev
+vscode:
+```
+
+#### install postgrel extension
+![postgre extension](/_docs/assets/postgre.png)
+
+### start progress client
+
+``psql -Upostgres --host localhost``
+``\l`` - list default table
+``\q`` - quit
