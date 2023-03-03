@@ -92,7 +92,7 @@ opentelemetry-instrumentation-requests
 #### install instrumentation packages in requirements
 `pip install -r requirements.txt`
 
-#### intialize instrumentations inside app.py
+#### Add to app.py
 ```sh
 # app.py updates
 from opentelemetry import trace
@@ -103,6 +103,19 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
 ```
+#### intialize tracing instrumentations and an exporter that can send data to honeycomb
 
+```sh
+provider = TracerProvider()
+processor = BatchSpanProcessor(OTLPSpanExporter())
+provider.add_span_processor(processor)
+trace.set_tracer_provider(provider)
+tracer = trace.get_tracer(__name__)
+```
+#### Initialize automatic instrumentation with Flask
 
-
+```sh
+app = Flask(__name__)
+FlaskInstrumentor().instrument_app(app)
+RequestsInstrumentor().instrument()
+```
