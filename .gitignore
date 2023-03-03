@@ -1,6 +1,10 @@
 # ignore docker directories
 docker/**/*
 
+# ignore aws cli
+aws/**/*
+
+#
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
