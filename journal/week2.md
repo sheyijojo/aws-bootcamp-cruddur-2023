@@ -58,7 +58,7 @@ gp env HONEYCOMB_SERVICE_NAME="Cruddur"
 - We dont to set ```export HONEYCOMB_SERVICE_NAME="Cruddur``` directly, it is specific to a service.
 - set `OTEL_SERVICE_NAME: "${HONEYCOMB_SERVICE_NAME}"` in the docker-compose file in the service env with a service name `OTEL_SERVICE_NAME: "${backend-flask}"backend-flask`
 
-[otel](/_docs/assets/otelservice.jpg)
+![otel](/_docs/assets/otelservice.jpg)
 
 - Entire project should have honeycombAPI key
 - Not as easy for the frontend, especially automatic instrumentations
@@ -119,3 +119,6 @@ app = Flask(__name__)
 FlaskInstrumentor().instrument_app(app)
 RequestsInstrumentor().instrument()
 ```
+
+![instrumentation 1](/_docs/assets/instrumentation1.png)
+![instrumentation 1](/_docs/assets/instrumentation1.png)
