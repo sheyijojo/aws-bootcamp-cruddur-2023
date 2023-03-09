@@ -44,9 +44,10 @@ gp env HONEYCOMB_SERVICE_NAME="Cruddur"
  #### why export env is important
  Subshell and shell reason when running commands.
 
-#### set up service name
-- `export HONEYCOMB_SERVICE_NAME="Cruddur`
-- `gp env HONEYCOMB_SERVICE_NAME="Cruddur"`
+#### set up service name specific to a service e.g backend or frontend
+##### This example is not the best, it is better to hardcode it into our OTEL in the Docker compose environment
+- `export HONEYCOMB_SERVICE_NAME="backend-flask`
+- `gp env HONEYCOMB_SERVICE_NAME="backend-flask"`
 - otel service name is the standard
  - `OTEL_SERVICE_NAME: "${HONEYCOMB_SERVICE_NAME}"`
 - Otel service name determines the service name in the spans that gets sent from my application. 
@@ -56,12 +57,13 @@ gp env HONEYCOMB_SERVICE_NAME="Cruddur"
 
 - Hard code it into docker compose file 
 - We dont to set ```export HONEYCOMB_SERVICE_NAME="Cruddur``` directly, it is specific to a service.
-- set `OTEL_SERVICE_NAME: "${HONEYCOMB_SERVICE_NAME}"` in the docker-compose file in the service env with a service name `OTEL_SERVICE_NAME: "${backend-flask}"backend-flask`
+- set `OTEL_SERVICE_NAME: "${HONEYCOMB_SERVICE_NAME}"` in the docker-compose file in the service env with a service name 
+- Entire project should have honeycombAPI key
+- Not as easy for the frontend, especially automatic instrumentations`OTEL_SERVICE_NAME: "${backend-flask}"backend-flask`
 
 ![otel](/_docs/assets/otelservice.jpg)
 
-- Entire project should have honeycombAPI key
-- Not as easy for the frontend, especially automatic instrumentations
+
 
 
 ##### OTEL - OPEN TELEMETRY
@@ -154,7 +156,7 @@ ports:
 #### Make a data set on Honeycomb
 Data is automatically created
 
-#### Send spans to console for testing in app.py
+#### Send spans to console using mock-data  for testing in app.py
 - shows logs within the backend-flask app(SDOUT)
 - HoneyComb -----------------
 -  add another processor, this was used when trying to capture data on honeycomb
@@ -176,10 +178,12 @@ Data is automatically created
 ``https://honeycomb-whoami.glitch.me/``
 - Check what service the api can do and not do.
 
-![api_test](/_docs/assets/api_test.jpg)
-- Fortunately, my api key was mapped to Honeycomb in my env. 
 
-- This is for setting the key variable incase
+#### Fortunately, my api key was mapped to Honeycomb in my docker env.
+![api_test](/_docs/assets/api_test.jpg)
+ 
+
+#### This is for setting the key variable incase
 `gp env HONEYCOMB_API_KEY="APIKEY"`
 
 ##### Span data from Honeycomb in Bootcamp env
@@ -208,3 +212,29 @@ Data is automatically created
 #### Rename the span
 - This is the name of the span
 `with tracer.start_as_current_span("home-activities-mock-data"):`
+
+#### Span mock-data after debugging services: home_activities.py
+[api_mock_data](/_docs/assets/mock-data.png)
+
+#### search for library names on Honeycomb
+- This tells us about where our spans are coming from
+- e.g Home/activties and opentelemetry.instrumentation.flask
+
+#### Creating special spans with attributes Spans can be replacement for logs 
+- check documentation
+- placed into servives e.g home_activities
+``span = trace.get_current_span()``
+``span.set_attribute("user.id", user.id())``
+
+#### with my data. Two attributes meaningful to me
+``span = trace.get_current_span()``
+``span.set_attribute("app.now", now.isoformat())``
+``span.set_attribute("app.result_length", len(results))``
+
+#### app.now is the new attribute
+- This is seen on honycomb
+- Create new query `count`
+- `count where= emppy groupy = trace.trace_id`
+
+`git tag week-2`
+`git push --tags`
