@@ -32,5 +32,3 @@ ports:
     visibility: public
 
 
-ns:
-    - 42Crunch.vscode-openapi

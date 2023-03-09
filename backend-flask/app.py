@@ -22,12 +22,24 @@ from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
 
 # HoneyComb ---------------
 # Initialize tracing and an exporter that can send data to Honeycomb
+# OTLP is sending span to the internet
 provider = TracerProvider()
 processor = BatchSpanProcessor(OTLPSpanExporter())
 provider.add_span_processor(processor)
+
+
+# HoneyComb -----------------
+# add another processor, this was used when trying to capture data on honeycomb
+# Console is sending spans to the console
+# shows logs within the backend-flask app(SDOUT)
+simple_processor = SimpleSpanProcessor(ConsoleSpanExporter())
+provider.add_span_processor(simple_processor)
+
+
 trace.set_tracer_provider(provider)
 tracer = trace.get_tracer(__name__)
 
@@ -38,7 +50,6 @@ app = Flask(__name__)
 # Initialize automatic instrumentation with Flask
 FlaskInstrumentor().instrument_app(app)
 RequestsInstrumentor().instrument()
-
 
 frontend = os.getenv('FRONTEND_URL')
 backend = os.getenv('BACKEND_URL')

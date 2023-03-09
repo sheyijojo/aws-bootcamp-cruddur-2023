@@ -18,11 +18,11 @@ source: [datadog](https://www.datadoghq.com/knowledge-center/distributed-tracing
 - Traces is what is needed for development! 
 
 #### What the heck is Instrumentation?
-Instrumentation is the data that sends the code that makes these trace. e.g Amazon x-ray, Honeycomb
+Instrumentation is the data that sends the code that makes these traces. e.g Amazon x-ray, Honeycomb
 
 #### create environment on Honeycomb - bootcamp
 - protect your api keys
-- data can be added to
+- data can be deposited into your ENV if API key is found.
 
 
 ## Honeycomb Setup 
@@ -34,15 +34,15 @@ gp env HONEYCOMB_API_KEY=""
 gp env HONEYCOMB_SERVICE_NAME="Cruddur"
 ```
 - #### API key set up, standardized for honeycomb
-- Get API key from honeycomb website:
+-  Get API key from honeycomb website:
  - ``export HONEYCOMB_API_KEY=""``
  - Put in your api key in here:
  - ``gp env HONEYCOMB_API_KEY=""``
- - gp env is persistent for gitpod wheneve it restarts the env
+ - gp env is persistent for gitpod whenever it restarts the env
 
 
  #### why export env is important
- Subshell annd shell reason when running commands.
+ Subshell and shell reason when running commands.
 
 #### set up service name
 - `export HONEYCOMB_SERVICE_NAME="Cruddur`
@@ -65,7 +65,7 @@ gp env HONEYCOMB_SERVICE_NAME="Cruddur"
 
 
 ##### OTEL - OPEN TELEMETRY
-Configuring OTEL to send to Honeycomb. The libs installing our app is opensource.They are from the OTEL project(part of CNCF- Cloud Native Foundations), which runs kubernetes
+Configuring OTEL to send to Honeycomb. The libs installing our app is opensourced.They are from the OTEL project(part of CNCF- Cloud Native Foundations), which runs kubernetes.
 
 #### Add to the backend environment on docker-compose file
 `cd backend-flask`
@@ -75,8 +75,8 @@ OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
 OTEL_SERVICE_NAME: "${HONEYCOMB_SERVICE_NAME}"
 ```
 
-#### What is happening above ? Honeycomb not in cloud environment
-Honey comb is not in my cloud environment. Cloud env is sending standardized messages out to oneycomb, honeycomb stores in our database and gives a ui to look at them.
+#### What is happening above ? Honeycomb is not in cloud environment
+Honeycomb is not in my cloud environment. Cloud env is sending standardized messages out to honeycomb, honeycomb stores in our database and gives a ui to look at them.
 we could can change this configs and send to other OTEL backend. Not tied to honeycomb alone.
 
 #### Add to instrumentation requirements - code from honeycomb python
@@ -122,3 +122,89 @@ RequestsInstrumentor().instrument()
 
 ![instrumentation 1](/_docs/assets/instrumentation1.png)
 ![instrumentation 1](/_docs/assets/instrumentation1.png)
+
+#### Docker File in Devlopment and Production
+- In real life we don't use the same docker file for development and production.
+- This is because we use a different base image 
+- In development we have all our tools, e.g we want VIM, Ubuntu, ssh and so on. These are not light-weight
+- In production, we want it super slim or light weight. We don't want all these extras installed
+- It is more secured, faster to exclude all these extras. Smaller images
+
+#### Make ports open and public always on gitpod 
+```sh
+ports:
+  - name: frontend
+    port: 3000
+    onOpen: open-browser
+    visibility: public
+  - name: backend
+    port: 4567
+    visibility: public
+  - name: xray-daemon
+    port: 2000
+    visibility: public
+```
+
+
+#### Test the Honeycomb instrumentations added
+- `cd frontend` to run `npm i install` t
+- `cd  ..` `to compose up`
+- Accessed frontend3000 and backend3000 to get data
+
+#### Make a data set on Honeycomb
+Data is automatically created
+
+#### Send spans to console for testing in app.py
+- shows logs within the backend-flask app(SDOUT)
+- HoneyComb -----------------
+-  add another processor, this was used when trying to capture data on honeycomb
+- Console is sending spans to the console
+``simple_processor = SimpleSpanProcessor(ConsoleSpanExporter())``
+``provider.add_span_processor(simple_processor)``
+
+#### add this to import the modules
+``from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor``
+
+#### Span data on console 
+![Telemetry span on console](/_docs/assets/telemetry_console.png)
+
+
+#### API key difference in ENV Debugging
+##### GLITCH
+``env | grep HONEY``
+- I observed the API key gotten was for the Test Env and not the Bootcamp env created in Honeycomb
+``https://honeycomb-whoami.glitch.me/``
+- Check what service the api can do and not do.
+
+![api_test](/_docs/assets/api_test.jpg)
+- Fortunately, my api key was mapped to Honeycomb in my env. 
+
+- This is for setting the key variable incase
+`gp env HONEYCOMB_API_KEY="APIKEY"`
+
+##### Span data from Honeycomb in Bootcamp env
+![span data](/_docs/assets/span%20data%20honeycomb.png)
+
+- Api end point 'home' is just exemplyfies the twitter feeds and it is hard coded
+- It is not connected to a databse, or another service. But in real life the databse should be connected
+
+#### Hardcode span to represent. We are importing to add only the api
+``honeycomb python docs``
+``https://docs.honeycomb.io/getting-data-in/opentelemetry/python/``
+- Every service is hardcoded and returns a result.
+- So we need to edit a service called `home_activities.py`
+
+#### acquiring a Tracer
+#### To create spans, you need to get a Tracer.
+``from opentelemetry import trace ``
+``tracer = trace.get_tracer("home.activities")``
+
+#### Service Tracer
+![service tracer](/_docs/assets/tracerhomeactivities.png)
+
+#### create a span
+- Add this to your def run(function ) in activities
+`with tracer.start_as_current_span("http-handler"):`
+#### Rename the span
+- This is the name of the span
+`with tracer.start_as_current_span("home-activities-mock-data"):`
