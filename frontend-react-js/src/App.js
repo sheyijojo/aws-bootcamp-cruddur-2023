@@ -15,6 +15,8 @@ import {
   RouterProvider
 } from "react-router-dom";
 
+import { Amplify } from `aws-amplify`;
+
 const router = createBrowserRouter([
   {
     path: "/",
