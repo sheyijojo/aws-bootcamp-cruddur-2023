@@ -96,7 +96,7 @@ Amplify.configure({
     environment:
       REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
       REACT_APP_AWS_PROJECT_REGION: "${AWS_DEFAULT_REGION}"
-      REACT_APP_AWS_COGNITO_REGION: "$AWS_DEFAULT_REGION}"
+      REACT_APP_AWS_COGNITO_REGION: "${AWS_DEFAULT_REGION}"
       REACT_APP_AWS_USER_POOLS_ID: "xoxo"
       process.env.REACT_APP_CLIENT_ID: ""
 ```
@@ -157,3 +157,43 @@ const signOut = async () => {
 
 ## User Pool and Client ID error
 ![user_pool error](/_docs/assets/userpooliderror.png)
+
+## Signin Page edit and cookies removal
+
+```sh
+
+import { Auth } from 'aws-amplify';
+
+
+
+const onsubmit = async (event) => {
+  setCognitoErrors('')
+  event.preventDefault();
+  try {
+    Auth.signIn(username, password)
+      .then(user => {
+        localStorage.setItem("access_token", user.signInUserSession.accessToken.jwtToken)
+        window.location.href = "/"
+      })
+      .catch(err => { console.log('Error!', err) });
+  } catch (error) {
+    if (error.code == 'UserNotConfirmedException') {
+      window.location.href = "/confirm"
+    }
+    setCognitoErrors(error.message)
+  }
+  return false
+}
+
+let errors;
+if (cognitoErrors){
+  errors = <div className='errors'>{cognitoErrors}</div>;
+}
+
+// just before submit component
+{errors}
+
+
+
+
+```
