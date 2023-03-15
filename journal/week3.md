@@ -139,3 +139,21 @@ React.useEffect(()=>{
 }, [])
 
 ```
+
+## Update profileinfo.js to remove cookies
+
+```sh
+import { Auth } from 'aws-amplify';
+
+const signOut = async () => {
+  try {
+      await Auth.signOut({ global: true });
+      window.location.href = "/"
+  } catch (error) {
+      console.log('error signing out: ', error);
+  }
+}
+```
+
+## User Pool and Client ID error
+![user_pool error](/_docs/assets/userpooliderror.png)
