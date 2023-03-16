@@ -282,5 +282,39 @@ const resend_code = async (event) => {
 
 
 ## Signup page
+```sh
+const [name, setName] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [errors, setErrors] = React.useState('');
 
+  // Username is Eamil
+  const onsubmit = async (event) => {
+    event.preventDefault();
+    setErrors('')
+    try {
+        const { user } = await Auth.signUp({
+          username: email,
+          password: password,
+          attributes: {
+              name: name,
+              email: email,
+              preferred_username: username,
+          },
+          autoSignIn: { // optional - enables auto sign in after user is confirmed
+              enabled: true,
+          }
+        });
+        console.log(user);
+        window.location.href = `/confirm?email=${email}`
+    } catch (error) {
+        console.log(error);
+        setErrors(error.message)
+    }
+    return false
+  }
+```
 ![singup](/_docs/assets/singuppage.png)
+
+## RECOVERY PAGE
