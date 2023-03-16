@@ -277,3 +277,10 @@ const resend_code = async (event) => {
 
 ## Recreate userpool using email only 
 
+- Rcreated the user pool
+- Had problems with seeing my default region - Fixed it
+
+
+## Signup page
+
+![singup](/_docs/assets/singuppage.png)
