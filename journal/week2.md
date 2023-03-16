@@ -214,7 +214,7 @@ Data is automatically created
 `with tracer.start_as_current_span("home-activities-mock-data"):`
 
 #### Span mock-data after debugging services: home_activities.py
-[api_mock_data](/_docs/assets/mock-data.png)
+![api_mock_data](/_docs/assets/mock-data.png)
 
 #### search for library names on Honeycomb
 - This tells us about where our spans are coming from
