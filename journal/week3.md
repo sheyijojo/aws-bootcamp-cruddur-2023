@@ -7,7 +7,8 @@
 
 - Create Access key for CLI from Users account 
 
-## Set Environmental Variables
+
+## Set Environmental Variables. This not my Key Okay!
 - This aws default ID and Accesskey, not mine yolo!
 ```sh
 
@@ -19,6 +20,10 @@ export AWS_DEFAULT_REGION=us-east-1
 
 ```
  - Remember to NEVER commit your awi cli and API key!
+
+## Set the environment variables in Docker-compose backend environment
+
+![AWS Backend](/_docs/assets/aws_backend.jpg)
 
 ## CLI autoprompt on cloud shell for auto complete
 
