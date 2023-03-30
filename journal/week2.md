@@ -8,6 +8,24 @@
 
 - [ ] Run custom queries in Honeycomb and save them later eg. Latency by UserID, Recent Traces
 
+#### Observability vs monitoring 
+- Current state of logging
+ - On premise logs
+  - Infrastrure
+  - Application(s)
+  - Antivirus
+  - Firewall
+
+- Cloud logs
+ - Infrastruture 
+ - Application(s)
+ - Anti-Virus
+ - Firewall
+ - etc
+
+
+
+ 
 #### Distributed Tracing Intro
 [YouTube link](http://localhost/ "link title")
 
@@ -238,3 +256,5 @@ Data is automatically created
 
 `git tag week-2`
 `git push --tags`
+
+#### 

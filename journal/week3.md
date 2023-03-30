@@ -318,3 +318,33 @@ const [name, setName] = React.useState('');
 ![singup](/_docs/assets/singuppage.png)
 
 ## RECOVERY PAGE
+
+
+## Authenticating Server Side
+- Inside Homefeeds.js
+Add in the `HomeFeedPage.js` a header eto pass along the access token
+
+```js
+  headers: {
+    Authorization: `Bearer ${localStorage.getItem("access_token")}`
+  }
+
+  ```
+
+  ## Implement CORS Policy 
+
+```sh
+cors = CORS(
+  app, 
+  resources={r"/api/*": {"origins": origins}},
+  headers=['Content-Type', 'Authorization'], 
+  expose_headers='Authorization',
+  methods="OPTIONS,GET,HEAD,POST"
+)
+
+```
+
+# Cognito JWT Server side verify
+
+- Put it inside the requirements file
+`Flask-AWSCognito`
