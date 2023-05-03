@@ -257,4 +257,111 @@ Data is automatically created
 `git tag week-2`
 `git push --tags`
 
-#### 
+
+# Xray instrumentation
+DAEMON is a must have. It runs alongside my app. Send data to and it collects it and batches it and send it to the X-ray API to visualize data in X-ray.
+
+#### NPM Install Permanently stored in gitpod.yml
+- Go to gitpod.yml
+```sh
+- name: react-js
+    command: |
+      cd frontend-react-js
+      npm i
+```
+
+#### Instrument AWS X-Ray for Flask
+- I have set this env permanently in my env
+```sh
+export AWS_REGION="us-east-1"
+gp env AWS_REGION="us-east-1"
+```
+
+## Xray for python Flask
+#### Add xray SDK to the requirements.txt
+- check documentation
+- add `aws-xray-sdk` to requirements.txt 
+```sh
+cd backend-flask
+pip install -r requirements.txt
+```
+
+#### Add to app.py
+```sh
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
+
+xray_url = os.getenv("AWS_XRAY_URL")
+xray_recorder.configure(service='backend-flask', dynamic_naming=xray_url)
+XRayMiddleware(app, xray_recorder)
+```
+source:
+- https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-python-configuration.html
+-  https://github.com/aws/aws-xray-sdk-python
+
+
+### Setup AWS X-Ray Resources for Sampling rules
+Create and add to `aws/json/xray.json`
+```sh
+{
+  "SamplingRule": {
+      "RuleName": "Cruddur",
+      "ResourceARN": "*",
+      "Priority": 9000,
+      "FixedRate": 0.1,
+      "ReservoirSize": 5,
+      "ServiceName": "backend-flask",
+      "ServiceType": "*",
+      "Host": "*",
+      "HTTPMethod": "*",
+      "URLPath": "*",
+      "Version": 1
+  }
+}
+```
+
+
+## Create an xray group
+- Add this to my terminal
+```sh
+aws xray create-group \
+   --group-name "Cruddur" \
+   --filter-expression "service(\"$backend-flask\")"
+```
+- Go to xray and see the created groups. Groups are used to match traces together. It is not mandatory to create groups.
+
+
+
+## Create sampling rule
+`aws xray create-sampling-rule --cli-input-json file://aws/json/xray.json`
+- Sampling determines how much information you want to use. You dont want to get all info about the app data points.
+ - Go to cloud watch -- settings--sampling rules
+
+ ## Install Xray Daemon
+ source:
+ - https://docs.aws.amazon.com/xray/latest/devguide/xray-daemon.html
+ - https://github.com/aws/aws-xray-daemon
+ - https://github.com/marjamis/xray/blob/master/docker-compose.yml
+
+## Add Daemon Service to Docker Compose
+- I want it in the docker compose file instead of in the env like above. When EC2 is run, i dont need to run the daemon in the cluster to get reporting. 
+
+- source: docker hub aws-xray-daemon
+```sh
+xray-daemon:
+    image: "amazon/aws-xray-daemon"
+    environment:
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_REGION: "us-east-1"
+    command:
+      - "xray -o -b xray-daemon:2000"
+    ports:
+      - 2000:2000/udp
+```
+ We need to add these two env vars to our backend-flask in our docker-compose.yml file
+ 
+ ```sh
+      AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*"
+      AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
+ ```
