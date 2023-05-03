@@ -365,3 +365,8 @@ xray-daemon:
       AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*"
       AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
  ```
+
+
+ ## Add X-ray Subsegments
+
+ 
