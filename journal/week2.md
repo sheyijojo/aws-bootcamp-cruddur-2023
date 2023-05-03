@@ -1,6 +1,6 @@
 # Week 2 — Distributed Tracing
 
-## Homework Challenges
+# Honeycomb and Xray
 
 - [ ] Instrument Honeycomb for the frontend-application to observe network latency between frontend and backend
 
