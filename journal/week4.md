@@ -239,7 +239,7 @@ psql $NO_DB_CONNECTION_URL  -c "CREATE database cruddur;"
 
 ## Connect to dabase
 connect to the database with the schema file db-schema
-
+#### Shell script to load the seed data
 ```sh
 #! /usr/bin/bash
 
@@ -249,9 +249,56 @@ schema_path="$(realpath .)/db/schema.sql"
 
 echo $schema_path
 
+if [ "$1" = "prod" ]; then
+  echo "Running in production mode"
+  URL=$PROD_CONNECTION_URL
+else
+  URL=$CONNECTION_URL
+fi
 
 psql $CONNECTION_URL cruddur < $schema_path
 
 -- comment --- psql $NO_DB_CONNECTION_URL cruddur < $schema_path
 
 ```
+## Get a beautiful color in db-schema
+
+```sh
+CYAN='\033[1;36m'
+NO_COLOR='\033[0m'
+LABEL="db-schema-load"
+printf "${CYAN}== ${LABEL}${NO_COLOR}\n"
+
+```
+
+## Create Tables on schmema.sql
+`chmod u+x ./db/schema.sql`
+```sh
+-- forcefully drop our tables if they already exist
+DROP TABLE IF EXISTS public.users cascade;
+DROP TABLE IF EXISTS public.activities;
+
+
+CREATE TABLE public.users (
+  uuid UUID default uuid_generate_v4() primary key,
+  display_name text,
+  handle text,
+  cognito_user_id text,
+  created_at timestamp default current_timestamp NOT NULL
+);
+
+## table 2
+CREATE TABLE public.activities (
+  uuid UUID default uuid_generate_v4() primary key,
+  user_uuid UUID REFERENCES public.users(uuid) NOT NULL,
+  message text NOT NULL,
+  replies_count integer default 0,
+  reposts_count integer default 0,
+  likes_count integer default 0,
+  reply_to_activity_uuid integer,
+  expires_at timestamp,
+  created_at timestamp default current_timestamp NOT NULL
+);
+
+```
+## stopped at not been able to create tables 1:50pm
