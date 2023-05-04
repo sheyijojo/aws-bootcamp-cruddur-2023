@@ -25,6 +25,8 @@ It is faster to provision an RDS instance
 -  Secret manager is a must have in managing Postgres
 - It is good to change the port number from 5432(default for Postgress)
 
+
+# Start of my local mode DB Postgres
 #### paste this in my cli
 - I commented out the dynamo db container inside docker file
 
@@ -143,12 +145,113 @@ psql postgresql://postgres:password@localhost:5432/cruddur
 
 ## Export it now in the terminal env
 export CONNECTION_URL="postgresql://postgres:password@localhost:5432/cruddur"
+## persist it for later
+gp env CONNECTION_URL="postgresql://postgres:password@localhost:5432/cruddur"
 
 ##connect to it
 psql $CONNECTION_URL
 ```
-
-
-
-
 ## local host == 127.0.0.1
+
+## set for production URL for the RDS instance
+```sh
+export PROD_CONNECTION_URL="postgresql://sheyirootdb:passwordismyhead@cruddur-db-instance.cxahjycbg2wr.us-east-1.rds.amazonaws.com:5432/cruddur"
+
+gp env PROD_CONNECTION_URL="postgresql://sheyirootdb:passwordismyhead@cruddur-db-instance.cxahjycbg2wr.us-east-1.rds.amazonaws.com:5432/cruddur"
+```
+
+# Shell Script
+## create a bin folder, wanna run a bash script
+- Add db-create file
+- Add db-drop file
+- Add db-schema-load file
+
+`whereis bash` on the terminal
+
+## Inside the db-create script file
+```sh
+#! /usr/bin/bash
+ls -l ./bin
+#chmod mode for the user only
+chmod u+x bin/db-create
+
+
+#chmod for all the groups
+chmod +x bin/db-create
+
+chmod for all the files in bin
+chmod u+x bin/*
+
+PSQL $CONNECTION_URL -c "DROP database cruddur;"
+```
+
+## Note 
+
+`` ./bin/db-drop``. This won't run because. we are connecting to the database and the same time, we want to drop the database. 
+
+## Introduce SED. 
+`man SED` we need to manipulate the test
+## SOURCE
+https://askubuntu.com/questions/595269/use-sed-on-a-string-variable-rather-than-a-file
+
+## Drop database SHell script using SED
+
+Put inside the db-drop
+```sh
+#! /usr/bin/bash
+# /\ - escapes it
+# g - globally
+
+echo "db-drop"
+
+NO_DB_CONNECTION_URL=$(sed 's/\/cruddur//g' <<<"$CONNECTION_URL")
+psql $NO_DB_CONNECTION_URL -c "DROP database cruddur;"
+
+#on terminal
+./bin/db-drop
+or
+ source /bin/db-drop
+```
+
+## code explanation above
+```sThis Bash script does the following:
+
+It extracts the connection URL from the environment variable $CONNECTION_URL.
+It removes the "/cruddur" string from the connection URL using the sed command and stores the modified URL in the $NO_DB_CONNECTION_URL variable.
+
+
+It runs the psql command with the modified connection URL to connect to the PostgreSQL database and execute the SQL command "DROP database cruddur;", which drops the "cruddur" database from the server.
+
+
+In short, this script drops the "cruddur" database from the PostgreSQL server by connecting to it using the provided connection URLh
+
+```
+
+## Create Database
+
+```sh
+#! /usr/bin/bash
+
+NO_DB_CONNECTION_URL=$(sed 's/\/cruddur//g' <<<"$CONNECTION_URL")
+psql $NO_DB_CONNECTION_URL  -c "CREATE database cruddur;"
+
+```
+
+## Connect to dabase
+connect to the database with the schema file db-schema
+
+```sh
+#! /usr/bin/bash
+
+echo "db-schema-load"
+
+schema_path="$(realpath .)/db/schema.sql"
+
+echo $schema_path
+
+
+psql $CONNECTION_URL cruddur < $schema_path
+
+-- comment --- psql $NO_DB_CONNECTION_URL cruddur < $schema_path
+
+```
