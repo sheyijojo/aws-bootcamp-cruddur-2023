@@ -2,6 +2,22 @@
 
 ### aws sts get-caller-identity
 - if reseted, the use  env grep
+```sh
+curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+
+ echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+
+sudo apt update
+sudo apt install -y postgresql-client-13 libpq-dev
+
+whereis psql
+export PSQL_DIR=/usr/bin/psql 
+export PATH="$PSQL_DIR:$PATH"
+
+export HONEYCOMB_SERVICE_NAME="Cruddur"
+gp env PATH="$PSQL_DIR:$PATH"
+env | grep psql
+```
 
 # Objective 
 
@@ -29,7 +45,7 @@ It is faster to provision an RDS instance
 # Start of my local mode DB Postgres
 #### paste this in my cli
 - I commented out the dynamo db container inside docker file
-
+- I am working on RDS Posgres
 ```sh
 aws rds create-db-instance \
   --db-instance-identifier cruddur-db-instance \
@@ -57,7 +73,7 @@ aws rds create-db-instance \
 
 ```
 ## Do not save the RDS password in your github repo
-RDS can be stopped temporarily and started automaitcally after 7 days
+RDS can be stopped in the AWS console temporarily and started automaitcally after 7 days
 
 ## connect to psql client or database explorer
 
@@ -237,9 +253,11 @@ psql $NO_DB_CONNECTION_URL  -c "CREATE database cruddur;"
 
 ```
 
-## Connect to dabase
+## Load the schema
 connect to the database with the schema file db-schema
-#### Shell script to load the seed data
+schema is like the excel sheet
+
+## Shell script to load the seed data
 ```sh
 #! /usr/bin/bash
 
@@ -249,6 +267,7 @@ schema_path="$(realpath .)/db/schema.sql"
 
 echo $schema_path
 
+#toggle between prod mode and local dev mode
 if [ "$1" = "prod" ]; then
   echo "Running in production mode"
   URL=$PROD_CONNECTION_URL
@@ -258,7 +277,11 @@ fi
 
 psql $CONNECTION_URL cruddur < $schema_path
 
--- comment --- psql $NO_DB_CONNECTION_URL cruddur < $schema_path
+
+
+# run this using
+./bin/db-schema-load prod
+
 
 ```
 ## Get a beautiful color in db-schema
@@ -269,10 +292,14 @@ NO_COLOR='\033[0m'
 LABEL="db-schema-load"
 printf "${CYAN}== ${LABEL}${NO_COLOR}\n"
 
+
 ```
 
 ## Create Tables on schmema.sql
-`chmod u+x ./db/schema.sql`
+- Load the data through a connection db-schema-load
+- create the data in db using sql, schema.sql
+- Make changes to schema, then have to rerun
+- `chmod u+x ./db/schema.sql`
 ```sh
 -- forcefully drop our tables if they already exist
 DROP TABLE IF EXISTS public.users cascade;
@@ -301,4 +328,106 @@ CREATE TABLE public.activities (
 );
 
 ```
-## stopped at not been able to create tables 1:50pm
+## Schema specification is found in the open-api file in the backend
+
+![openapischema](/_docs/assets/api%20schema%20specification.png)
+
+## connect to the db
+```sh
+#coonect
+sh./bin/db-connect
+
+#list tables
+\dt
+
+```## Other clor codes
+```sh
+
+CYAN='\033[1;36m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+Yellow='\033[0;33m'
+Blue='\033[0;34m'
+Magenta='\033[0;35m'
+NO_COLOR='\033[0m'
+
+LABEL="db-connect"
+
+printf "${RED}==${LABEL}${NO_COLOR}\n"
+
+```
+
+![tables in database](/_docs/assets/database%20tables%20in%20local%20mode.png)
+
+
+# seed data or load data into the database
+##### Create a file /bin/db-seed
+
+
+```sh
+echo "db-schema-load"
+seed_path="$(realpath .)/db/schema.sql"
+echo $seed_path
+
+if [ "$1" = "prod" ]; then
+  echo "Running in production mode"
+  URL=$PROD_CONNECTION_URL
+else
+  URL=$CONNECTION_URL
+fi
+
+psql $URL cruddur < $seed_path
+
+``
+## create a connecting url for seed.sql
+Apparently we need to the seed file to load data into the database. Data to be loaded is found in the seed.sql
+
+```sh
+#! /usr/bin/bash
+
+
+CYAN='\033[1;36m'
+NO_COLOR='\033[0m'
+LABEL="db-seed"
+printf "${CYAN}== ${LABEL}${NO_COLOR}\n"
+
+echo "db-schema-load"
+seed_path="$(realpath .)/db/seed.sql"
+echo $seed_path
+
+if [ "$1" = "prod" ]; then
+  echo "Running in production mode"
+  URL=$PROD_CONNECTION_URL
+else
+  URL=$CONNECTION_URL
+fi
+
+psql $URL cruddur < $seed_path
+
+```
+
+
+
+## create a file in db that has the data seed.sql
+# Always run the file throug the connection in bin
+##### /db/seed.ql
+
+```sh
+-- this file was manually created
+INSERT INTO public.users (display_name, handle, cognito_user_id)
+VALUES
+  ('Sheyi Gaji', 'sheyiuser' ,'MOCK'),
+  ('Victoria Alata', 'vicky' ,'MOCK');
+
+INSERT INTO public.activities (user_uuid, message, expires_at)
+VALUES
+  (
+    (SELECT uuid from public.users WHERE users.handle = 'sheyiuser' LIMIT 1),
+    'This was imported as seed data!',
+    current_timestamp + interval '10 day'
+  )
+
+  chmod u+x ./db/seed.ql
+  ./bin/db-seed
+```
+![seed data created](/_docs/assets/databse%20sheyi%20created.png)

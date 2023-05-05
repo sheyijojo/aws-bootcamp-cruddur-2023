@@ -15,7 +15,7 @@
 https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html
 
 export AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
-export AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+export AWS_SECRET_ACCESS_KEY=EXAMPLEKEYwJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 export AWS_DEFAULT_REGION=us-east-1
 
 ```
