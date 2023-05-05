@@ -1,7 +1,7 @@
 # Week 4 — Postgres and RDS
 
 ### aws sts get-caller-identity
-- if reseted, the use  env grep
+- if reseted, the use  env | grep psql to check for env var.
 ```sh
 curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
 
