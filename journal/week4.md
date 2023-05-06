@@ -14,9 +14,10 @@ whereis psql
 export PSQL_DIR=/usr/bin/psql 
 export PATH="$PSQL_DIR:$PATH"
 
-export HONEYCOMB_SERVICE_NAME="Cruddur"
+#export HONEYCOMB_SERVICE_NAME="Cruddur"
 gp env PATH="$PSQL_DIR:$PATH"
 env | grep psql
+psql -U postgres --host localhost
 ```
 
 # Objective 
@@ -328,6 +329,22 @@ CREATE TABLE public.activities (
 );
 
 ```
+
+## Easily setup (reset) everything in our database
+```sh
+
+#! /usr/bin/bash
+-e # stop if it fails at any point
+
+#echo "==== db-setup"
+
+bin_path="$(realpath .)/bin"
+
+source "$bin_path/db-drop"
+source "$bin_path/db-create"
+source "$bin_path/db-schema-load"
+source "$bin_path/db-seed"
+```
 ## Schema specification is found in the open-api file in the backend
 
 ![openapischema](/_docs/assets/api%20schema%20specification.png)
@@ -406,6 +423,16 @@ psql $URL cruddur < $seed_path
 
 ```
 
+## Debugging my database cruddur
+
+```sh
+\c database_name -- Connect to a specific database
+\dt -- List all tables in the current database
+\d table_name -- Describe a specific table
+\d public.activities
+
+```
+![database debug](/_docs/assets/deugging%20databse.png)
 
 
 ## create a file in db that has the data seed.sql
@@ -431,3 +458,81 @@ VALUES
   ./bin/db-seed
 ```
 ![seed data created](/_docs/assets/databse%20sheyi%20created.png)
+
+
+# PART 2
+
+## SQL RDS contd
+#### connect to the crudder database
+
+```sh
+\x ON - expanded display
+\x AUTO - expanded display
+SELECT * FROM public.activities;
+
+```
+
+## Data inside crudder
+![Data record](/_docs/assets/list%20of%20data%20in%20cruddur.png)
+
+## connect to the databse using the basebase explorer
+![](/_docs/assets/databse%20explorer.png)
+
+## Problem with connecting sessions
+Apparently, while using the explorer, can't drop database through the terminal, beacuse it indicates the session is currently on.
+- create a file /bin/db-sessions
+```sh
+#! /usr/bin/bash
+
+#echo "== db-sessions"
+GREEN='\033[0;32m'
+NO_COLOR='\033[0m'
+LABEL="db-sessions"
+printf "${GREEN}== ${LABEL}${NO_COLOR}\n"
+
+if [ "$1" = "prod" ]; then
+  echo "Running in production mode"
+  URL=$PROD_CONNECTION_URL
+else
+  URL=$CONNECTION_URL
+
+fi
+
+NO_DB_URL=$(sed 's/\/cruddur//g' <<<"$URL")
+psql $NO_DB_URL -c "select pid as process_id, \
+       usename as user,  \
+       datname as db, \
+       client_addr, \
+       application_name as app,\
+       state \
+from pg_stat_activity;"
+
+chmod u+x ./bin/db-sessions
+./bin/db-sessions
+```
+![db sessions](/_docs/assets/active%20db%20connections.png)
+
+## Be careful not to kill connections like that production
+This can cause database to be corrupted. 
+
+## Alternative to the explorer
+Create a script called db-setup for db-connect,....and the rest
+
+```sh
+#! /usr/bin/bash
+-e # stop if it fails at any point
+
+#echo "==== db-setup"
+CYAN='\033[1;36m'
+NO_COLOR='\033[0m'
+LABEL="db-setup"
+printf "${CYAN}==== ${LABEL}${NO_COLOR}\n"
+
+bin_path="$(realpath .)/bin"
+
+source "$bin_path/db-drop"
+source "$bin_path/db-create"
+source "$bin_path/db-schema-load"
+source "$bin_path/db-seed"
+
+```
