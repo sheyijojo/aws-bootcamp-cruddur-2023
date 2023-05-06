@@ -8,5 +8,7 @@ opentelemetry-instrumentation-flask
 opentelemetry-instrumentation-requests
 aws-xray-sdk
 
-
 Flask-AWSCognito
+
+psycopg[binary]
+psycopg[pool]

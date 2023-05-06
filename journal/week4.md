@@ -536,3 +536,70 @@ source "$bin_path/db-schema-load"
 source "$bin_path/db-seed"
 
 ```
+
+## Install Postgres Client- Install driver for postgress
+`https://www.psycopg.org/psycopg3/`
+
+#### We'll add the following to our requirments.txt
+```sh
+
+# pooling is the idea of managing multiple connections.
+psycopg[binary]
+psycopg[pool]
+
+pip install -r requirements.txt
+```
+## DB Object and Connection Pool
+`lib/db.py`
+
+```sh
+from psycopg_pool import ConnectionPool
+import os
+
+def query_wrap_object(template):
+  sql = '''
+  (SELECT COALESCE(row_to_json(object_row),'{}'::json) FROM (
+  {template}
+  ) object_row);
+  '''
+
+def query_wrap_array(template):
+  sql = '''
+  (SELECT COALESCE(array_to_json(array_agg(row_to_json(array_row))),'[]'::json) FROM (
+  {template}
+  ) array_row);
+  '''
+
+connection_url = os.getenv("CONNECTION_URL")
+pool = ConnectionPool(connection_url)
+```
+
+#### ADD to docker-compose enivironment
+
+```sh
+ # add to docker compose
+ CONNECTION_URL: "${CONNECTION_URL}"
+
+ #add to home activities
+from lib.db import pool
+
+```
+
+### Delete dummy/hardcoded data from home_activities
+![home_activities_pooling](/_docs/assets/home_activities%20for%20pooling.png)
+
+### Replace with pooling RDS to establish connection in home_activities 
+
+```sh
+   with pool.connection() as conn:
+        with conn.cursor() as cur:
+          cur.execute(sql)
+          # this will return a tuple
+          # the first field being the data
+          json = cur.fetchone()
+    return json[0]
+    return results
+
+```
+
+## stopped at 25:00
