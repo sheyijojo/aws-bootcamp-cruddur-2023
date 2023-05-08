@@ -1,6 +1,8 @@
 # Week 4 — Postgres and RDS
 
 ### aws sts get-caller-identity
+connect to cruddur with this
+`psql $CONNECTION_URL`
 - if reseted, the use  env | grep psql to check for env var.
 ```sh
 curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
@@ -357,7 +359,7 @@ sh./bin/db-connect
 #list tables
 \dt
 
-```## Other clor codes
+```## Other color codes
 ```sh
 
 CYAN='\033[1;36m'
@@ -602,4 +604,4 @@ from lib.db import pool
 
 ```
 
-## stopped at 25:00
+## s
