@@ -604,4 +604,9 @@ from lib.db import pool
 
 ```
 
-## s
+## first object return from postgres dev
+![obj data return](/_docs/assets/ist%20object%20return.png)
+
+## Data finally in frontend from postgres
+
+![](/_docs/assets/data%20in%20frontend.png)
