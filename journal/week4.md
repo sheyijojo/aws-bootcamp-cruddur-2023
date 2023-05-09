@@ -173,8 +173,11 @@ psql $CONNECTION_URL
 ## local host == 127.0.0.1
 
 ## set for production URL for the RDS instance
+## please check my end-point in RDS, I changed it
 ```sh
 export PROD_CONNECTION_URL="postgresql://sheyirootdb:passwordismyhead@cruddur-db-instance.cxahjycbg2wr.us-east-1.rds.amazonaws.com:5432/cruddur"
+
+
 
 gp env PROD_CONNECTION_URL="postgresql://sheyirootdb:passwordismyhead@cruddur-db-instance.cxahjycbg2wr.us-east-1.rds.amazonaws.com:5432/cruddur"
 ```
@@ -610,3 +613,62 @@ from lib.db import pool
 ## Data finally in frontend from postgres
 
 ![](/_docs/assets/data%20in%20frontend.png)
+
+## Establish connection to RDS database in AWS
+- Start up your RDS
+- database connection URL should work
+- check for the url connection
+`echo $PROD_CONNECTION_URL`
+
+## Open the subnet group
+- choose postgress 5432
+- put description GITPOD
+`psql $PROD_CONNECTION_URL`
+
+## Connect to RDS through GITPOD
+In order to connect to the RDS instance we need to provide our Gitpod IP and whitelist for inbound traffic on port 5432.
+
+- ``GITPOD_IP=$(curl ifconfig.me)``
+- `echo $GITPOD_IP`
+- ``ip addr show eth0 | grep inet | awk '{ print $2; }' | sed 's/\/.*$//'``
+- `export GITPOD_IP=$(curl ifconfig.me)`
+
+- pUT THE IP address in the inbpound source custom
+
+
+## Script to always get update from gitpod on new IP
+- Database security group ID
+- Postgres security group
+```sh
+
+export DB_SG_ID="sg-0b725eb"
+gp env DB_SG_ID="sg-0b725ee"
+export DB_SG_RULE_ID="sgr-0a88"
+gp env DB_SG_RULE_ID="sgr-6cfa88"
+```
+
+
+security GROUP needs constant update when IP address chamges in gitpod
+- Get the security group ID
+-  look up awi, modidy rules
+
+
+##  Whenever we need to update our security groups we can do this for access.
+
+```sh
+aws ec2 modify-security-group-rules \
+    --group-id $DB_SG_ID \
+    --security-group-rules "SecurityGroupRuleId=$DB_SG_RULE_ID,SecurityGroupRule={Description=GITPOD,IpProtocol=tcp,FromPort=5432,ToPort=5432,CidrIpv4=$GITPOD_IP/32}"
+
+chmod u+x
+```
+
+## rds-update-sg-rule
+## Update Gitpod IP on new env var
+```sh
+  command: |
+      export GITPOD_IP=$(curl ifconfig.me)
+      source "$THEIA_WORKSPACE_ROOT/backend-flask/db-update-sg-rule"
+
+
+```
