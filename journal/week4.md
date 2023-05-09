@@ -668,7 +668,11 @@ chmod u+x
 ```sh
   command: |
       export GITPOD_IP=$(curl ifconfig.me)
-      source "$THEIA_WORKSPACE_ROOT/backend-flask/db-update-sg-rule"
+      source "$THEIA_WORKSPACE_ROOT/backend-flask/bin/db-update-sg-rule"
 
 
 ```
+
+## change connection url to production_url in docker -compose
+
+## load schema for production environmnent 
