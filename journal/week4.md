@@ -236,7 +236,8 @@ or
 ```
 
 ## code explanation above
-```sThis Bash script does the following:
+```sh
+This Bash script does the following:
 
 It extracts the connection URL from the environment variable $CONNECTION_URL.
 It removes the "/cruddur" string from the connection URL using the sed command and stores the modified URL in the $NO_DB_CONNECTION_URL variable.
