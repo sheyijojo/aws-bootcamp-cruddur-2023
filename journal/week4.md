@@ -677,3 +677,164 @@ chmod u+x
 ## change connection url to production_url in docker -compose
 
 ## load schema for production environmnent 
+
+# PART 3 Cognito Post Confirmation Lambda
+
+- Cognito user Id is neccessary to generate cognito_user_id 
+- We need a lambda to do that
+
+## Head over to lambda on AWS, create a function in lambda
+- create a new lambda (Run code without thinking about servers)
+
+## create a folder in aws on gitpod called lamdas
+`/aws/lambdas`
+- Create a file `cruddur-post-confirmation-2.py`
+```sh
+
+import json
+import psycopg2
+import os
+
+def lambda_handler(event, context):
+    user = event['request']['userAttributes']
+    print('userAttributes')
+    print(user)
+
+    user_display_name  = user['name']
+    user_email         = user['email']
+    user_handle       = user['preferred_username']
+    user_cognito_id    = user['sub']
+    
+    
+    
+    try:
+      conn = psycopg2.connect(os.getenv('CONNECTION_URL'))
+      cur = conn.cursor()
+
+      print('entered-try')
+      sql = f"""
+         INSERT INTO public.users (
+          display_name, 
+          email,
+          handle, 
+          cognito_user_id
+          ) 
+        VALUES(
+          
+          {user_display_name},
+          {user_email},
+          {user_handle}
+          {user_cognito_id}
+          )
+      """
+      print('SQL Statement ----')
+      print(sql)
+
+   
+      params = [
+        user_display_name,
+        user_email,
+        user_handle,
+        user_cognito_id
+      ]
+      cur.execute(sql,*params)
+      conn.commit() 
+
+    except (Exception, psycopg2.DatabaseError) as error:
+      print(error)
+    finally:
+      if conn is not None:
+          cur.close()
+          conn.close()
+          print('Database connection closed.')
+    return event
+
+
+```
+
+## Add same code above to your lambda function in aws lambda 
+
+## Lamda needs to be connected to a VPC
+- Go to lambda 
+- Go to permissions
+- click on it
+- Attach new policy 
+- Create new policy - JSON
+- policy name - 
+`AWSLambdaVPCAccessExecutionRole`
+
+
+```sh
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeInstances",
+                "ec2:CreateNetworkInterface",
+                "ec2:DeleteNetworkInterface",
+                "ec2:AttachNetworkInterface",
+                "ec2:DescribeNetworkInterfaces"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+
+```
+
+- AWS cusomer managed(i.e one I create)
+- Go back tp Lambda
+- go to role name
+- Go to permissions
+- Attach policies - `AWSLambdaVPCAccessExecutionRole`
+## set env variables for production
+- key - `CONNECTION_URL`
+
+- Value - `postgresql://sheyirootdb:PASSWORDshouldbehere@cruddur-db-instance.cxahjycbg2wr.us-east-1.rds.amazonaws.com:5432/cruddur`
+
+## Development 
+### Add layers to your code
+You can configure your Lambda function to use additional code and content in the form of layers. A layer is a ZIP archive that contains libraries, a custom runtime, or other dependencies. With layers, you can use libraries in your function without needing to include them in your deployment package.
+
+- Go to layers on AWS console 
+- Add a layer
+- Specify an ARN
+
+## Layers configuration contd
+[https://github.com/AbhimanyuHK/aws-psycopg2]()
+
+`This is a custom compiled psycopg2 C library for Python. Due to AWS Lambda missing the required PostgreSQL libraries in the AMI image, we needed to compile psycopg2 with the PostgreSQL libpq.so library statically linked libpq library instead of the default dynamic link.`
+
+## Easiest method
+Some precompiled versions of this layer are available publicly on AWS freely to add to your function by ARN reference.
+
+[https://github.com/jetbridge/psycopg2-lambda-layer]()
+
+- Just go to Layers + in the function console and add a reference for your region
+
+`` arn:aws:lambda:us-east-1:898466741470:layer:psycopg2-py38:2 ``
+
+
+Alternatively you can create your own development layer by downloading the psycopg2-binary source files from
+[ https://pypi.org/project/psycopg2-binary/#files]()
+
+Download the package for the lambda runtime environment: ``psycopg2_binary-2.9.5-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl``
+
+Extract to a folder, then zip up that folder and upload as a new lambda layer to your AWS account
+
+## Add Lambda Trigger to Cognito for signup
+- Go to userpool properties and find triggers
+- We want a customized lambda trigger for post confirmation trigger
+- Customize welcome messages and log events for custom analytics.
+- Assign the lambda function created - cruddur-post-confirmation-2
+
+
+## Find a way to trigger lamda to find logs 
+- Select users and delete users
+- signup to create new user
+
+
+## error in post confirmation
+![](/_docs/assets/post_confirmation_error.png)
